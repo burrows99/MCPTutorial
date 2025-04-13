@@ -1,28 +1,57 @@
-# AI Sticky Notes MCP Server
+# AI Sticky Notes with MCP Server
 
-## 🚀 Purpose
-This MCP server provides:
-- Persistent note storage through Claude AI
-- REST API for note management
-- Integration with Claude desktop client
+![MCP Architecture](https://example.com/mcp-arch-diagram.png) <!-- Add actual diagram link -->
+
+## 📖 Table of Contents
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Troubleshooting](#-troubleshooting)
+- [Development](#-development)
+- [License](#-license)
 
 ## ✨ Features
-- Add notes via natural language
-- Persistent storage in `notes.txt`
-- Automatic API documentation
-- Claude desktop integration
+- **Natural Language Integration**  
+  Add notes through Claude AI conversations
+- **Persistent Storage**  
+  Notes saved in `notes.txt` with automatic backups
+- **REST API**  
+  Full OpenAPI documentation at `/docs`
+- **Cross-Platform**  
+  Supports Windows, macOS, and Linux
 
 ## 💻 Installation
+
+### Prerequisites
+- Python 3.9+
+- [uv](https://github.com/astral-sh/uv) package manager
+
 ```zsh
+# Install uv globally
+python -m pip install --user uv
+```
+
+### Setup
+```zsh
+# Clone repository
 git clone https://github.com/your-username/MCPTutorial.git
 cd MCPTutorial
-uv install -e .
+
+# Install dependencies
+uv venv  # Create virtual environment
+source .venv/bin/activate  # Activate venv
+uv install -e .  # Install in editable mode
+
+# Start MCP server
 uv run main:mcp
 ```
 
-## 🔌 Claude Desktop Setup
-1. Install [Claude Desktop](https://claude.ai/download)
-2. Configure connection:
+## 🔌 Claude Desktop Integration
+
+### Initial Setup
+1. [Download Claude Desktop](https://claude.ai/download)
+2. Configure MCP endpoint:
 ```zsh
 uv claude config set mcp.url http://localhost:8000
 ```
@@ -31,26 +60,95 @@ uv claude config set mcp.url http://localhost:8000
 uv claude
 ```
 
-## 🛠️ Usage in Claude
-1. **Add a note**:
+### In-App Usage
+1. **Add Note**  
+   `@add_note "Remind me to check emails at 3 PM"`
+   
+2. **View Notes**  
+   `@get_notes`
 
-2. **View notes**:
-
-3. **Integration**:
-```python
-# In your Claude workflows
-import mcp
-mcp.add_note("AI-generated insight: {{llm_output}}")
-```
+3. **API Documentation**  
+   `@mcp-docs`
 
 ## ⚙️ Configuration
-The `claude.config.json` file is auto-generated with:
+
+### Auto-Generated Config
+`claude.config.json` maintains connection settings:
 ```json
 {
   "mcp": {
-    "url": "http://localhost:8000"
+    "url": "http://localhost:8000",
+    "timeout": 30,
+    "auto_reconnect": true
   }
 }
 ```
 
-📝 **Note:** The MCP server must be running while using Claude. Keep the server terminal open during sessions.
+### Manual Overrides
+```zsh
+# Change port
+uv run main:mcp --port 8080
+
+# Persistent config
+uv claude config set mcp.url http://localhost:8080 --global
+```
+
+## 🔧 Troubleshooting
+
+### Common Issues
+1. **uv Not Found**  
+   ```zsh
+   # Verify installation path
+   which uv
+   # Add to PATH if missing
+   export PATH="$HOME/.local/bin:$PATH"
+   ```
+
+2. **MCP Tools Not Visible**  
+   ```zsh
+   # Force restart Claude
+   pkill -f "uv claude" && uv claude
+   ```
+
+3. **Port Conflicts**  
+   ```zsh
+   # Find and kill existing process
+   lsof -i :8000
+   kill -9 <PID>
+   ```
+
+### OS-Specific Solutions
+**Windows**  
+```powershell
+# Full reset
+Stop-Process -Name "uv","Claude" -Force
+```
+
+**macOS/Linux**  
+```zsh
+# Clean restart
+make restart  # Add Makefile target
+```
+
+## 🛠️ Development
+
+```zsh
+# Run tests
+uv run test
+
+# Code formatting
+uv fmt
+
+# Submit PR
+git checkout -b feature/new-tool
+git push origin feature/new-tool
+```
+
+## 📄 License
+MIT License - See [LICENSE](LICENSE) for details
+
+---
+
+> **Note**  
+> Keep the MCP server running in a separate terminal during Claude sessions.  
+> Report issues on [GitHub Issues](https://github.com/your-username/MCPTutorial/issues)
