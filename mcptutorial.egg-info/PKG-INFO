@@ -1,0 +1,162 @@
+Metadata-Version: 2.4
+Name: mcptutorial
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: mcp[cli]>=1.6.0
+
+# AI Sticky Notes with MCP Server
+
+![MCP Architecture](https://example.com/mcp-arch-diagram.png) <!-- Add actual diagram link -->
+
+## 📖 Table of Contents
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Troubleshooting](#-troubleshooting)
+- [Development](#-development)
+- [License](#-license)
+
+## ✨ Features
+- **Natural Language Integration**  
+  Add notes through Claude AI conversations
+- **Persistent Storage**  
+  Notes saved in `notes.txt` with automatic backups
+- **REST API**  
+  Full OpenAPI documentation at `/docs`
+- **Cross-Platform**  
+  Supports Windows, macOS, and Linux
+
+## 💻 Installation
+
+### Prerequisites
+- Python 3.9+
+- [uv](https://github.com/astral-sh/uv) package manager
+
+```zsh
+# Install uv globally
+python -m pip install --user uv
+```
+
+### Setup
+```zsh
+# Clone repository
+git clone https://github.com/your-username/MCPTutorial.git
+cd MCPTutorial
+
+# Install dependencies
+uv venv  # Create virtual environment
+source .venv/bin/activate  # Activate venv
+uv install -e .  # Install in editable mode
+
+# Start MCP server
+uv run main:mcp
+```
+
+## 🔌 Claude Desktop Integration
+
+### Initial Setup
+1. [Download Claude Desktop](https://claude.ai/download)
+2. Configure MCP endpoint:
+```zsh
+uv claude config set mcp.url http://localhost:8000
+```
+3. Start Claude:
+```zsh
+uv claude
+```
+
+### In-App Usage
+1. **Add Note**  
+   `@add_note "Remind me to check emails at 3 PM"`
+   
+2. **View Notes**  
+   `@get_notes`
+
+3. **API Documentation**  
+   `@mcp-docs`
+
+## ⚙️ Configuration
+
+### Auto-Generated Config
+`claude.config.json` maintains connection settings:
+```json
+{
+  "mcp": {
+    "url": "http://localhost:8000",
+    "timeout": 30,
+    "auto_reconnect": true
+  }
+}
+```
+
+### Manual Overrides
+```zsh
+# Change port
+uv run main:mcp --port 8080
+
+# Persistent config
+uv claude config set mcp.url http://localhost:8080 --global
+```
+
+## 🔧 Troubleshooting
+
+### Common Issues
+1. **uv Not Found**  
+   ```zsh
+   # Verify installation path
+   which uv
+   # Add to PATH if missing
+   export PATH="$HOME/.local/bin:$PATH"
+   ```
+
+2. **MCP Tools Not Visible**  
+   ```zsh
+   # Force restart Claude
+   pkill -f "uv claude" && uv claude
+   ```
+
+3. **Port Conflicts**  
+   ```zsh
+   # Find and kill existing process
+   lsof -i :8000
+   kill -9 <PID>
+   ```
+
+### OS-Specific Solutions
+**Windows**  
+```powershell
+# Full reset
+Stop-Process -Name "uv","Claude" -Force
+```
+
+**macOS/Linux**  
+```zsh
+# Clean restart
+make restart  # Add Makefile target
+```
+
+## 🛠️ Development
+
+```zsh
+# Run tests
+uv run test
+
+# Code formatting
+uv fmt
+
+# Submit PR
+git checkout -b feature/new-tool
+git push origin feature/new-tool
+```
+
+## 📄 License
+MIT License - See [LICENSE](LICENSE) for details
+
+---
+
+> **Note**  
+> Keep the MCP server running in a separate terminal during Claude sessions.  
+> Report issues on [GitHub Issues](https://github.com/your-username/MCPTutorial/issues)
