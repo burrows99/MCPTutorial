@@ -43,8 +43,10 @@ uv venv  # Create virtual environment
 source .venv/bin/activate  # Activate venv
 uv install -e .  # Install in editable mode
 
-# Start MCP server
-uv run main:mcp
+# Initialize and start MCP server
+uv init MCPTutorial
+uv add "mcp[cli]" 
+uv run mcp install main.py
 ```
 
 ## 🔌 Claude Desktop Integration
